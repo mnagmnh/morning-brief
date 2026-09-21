@@ -1,0 +1,581 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<title>Mnag's Morning Brief</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2F6F62">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Morning Brief">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F5F6F2;
+    --surface: #FFFFFF;
+    --ink: #1E2A22;
+    --ink-soft: #55604F;
+    --ink-faint: #8A9284;
+    --hairline: #E1E4DB;
+    --gold: #B9832A;
+    --gold-ink: #7A5416;
+    --teal: #2F6F62;
+    --teal-soft: #E6EFEC;
+    --warn-bg: #FBF1E4;
+    --warn-ink: #8A5A16;
+    --shadow: 0 1px 2px rgba(30,42,34,0.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #14180F;
+      --surface: #1B2117;
+      --ink: #ECEFE7;
+      --ink-soft: #B7BFAD;
+      --ink-faint: #7C8674;
+      --hairline: #2B3325;
+      --gold: #E0A94A;
+      --gold-ink: #F0C57A;
+      --teal: #7FBFAE;
+      --teal-soft: #1E2E29;
+      --warn-bg: #2B2413;
+      --warn-ink: #E3B872;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #14180F;
+    --surface: #1B2117;
+    --ink: #ECEFE7;
+    --ink-soft: #B7BFAD;
+    --ink-faint: #7C8674;
+    --hairline: #2B3325;
+    --gold: #E0A94A;
+    --gold-ink: #F0C57A;
+    --teal: #7FBFAE;
+    --teal-soft: #1E2E29;
+    --warn-bg: #2B2413;
+    --warn-ink: #E3B872;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Work Sans", -apple-system, "Segoe UI", sans-serif;
+    line-height:1.55;
+  }
+  .page{ max-width:760px; margin:0 auto; padding:0 20px 80px; }
+
+  header.masthead{
+    padding:38px 0 22px;
+    border-bottom:1px solid var(--hairline);
+  }
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--teal);
+  }
+  h1.title{
+    font-family:"Newsreader", Georgia, serif;
+    font-weight:500;
+    font-size:38px;
+    margin:8px 0 6px;
+    text-wrap:balance;
+  }
+  .sub{ color:var(--ink-soft); font-size:15px; }
+  .sub b{ color:var(--ink); font-weight:600; }
+
+  .install-bar{
+    display:flex; align-items:center; gap:10px;
+    background:var(--teal-soft);
+    border:1px solid var(--hairline);
+    border-radius:12px;
+    padding:10px 14px;
+    margin:18px 0 0;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .install-bar b{ color:var(--ink); }
+  .install-bar .x{
+    margin-left:auto;
+    background:none; border:none;
+    color:var(--ink-faint);
+    font-family:"IBM Plex Mono", monospace;
+    font-size:12px;
+    cursor:pointer;
+    padding:4px 6px;
+  }
+
+  .audio-bar{
+    position:sticky; top:0; z-index:5;
+    display:flex; align-items:center; gap:10px;
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-radius:12px;
+    padding:10px 14px;
+    margin:20px 0 0;
+    box-shadow:var(--shadow);
+    flex-wrap:wrap;
+  }
+  .audio-bar .btn{
+    font-family:"Work Sans", sans-serif;
+    font-weight:600;
+    font-size:13px;
+    border:1px solid var(--hairline);
+    background:var(--bg);
+    color:var(--ink);
+    padding:8px 14px;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .audio-bar .btn.primary{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#241a06;
+  }
+  .audio-bar .btn:disabled{ opacity:.45; cursor:default; }
+  .audio-status{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:12px;
+    color:var(--ink-faint);
+    margin-left:auto;
+  }
+  .audio-note{
+    width:100%;
+    font-size:12px;
+    color:var(--ink-faint);
+    padding-top:2px;
+  }
+
+  .glance{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+    gap:1px;
+    background:var(--hairline);
+    border:1px solid var(--hairline);
+    border-radius:12px;
+    overflow:hidden;
+    margin:26px 0 6px;
+  }
+  .glance div{
+    background:var(--surface);
+    padding:14px 16px;
+  }
+  .glance .k{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-faint);
+  }
+  .glance .v{
+    font-size:15px;
+    font-weight:600;
+    margin-top:4px;
+  }
+
+  section.card{
+    margin-top:34px;
+    padding-top:28px;
+    border-top:1px solid var(--hairline);
+  }
+  .sec-kicker{
+    display:flex; align-items:center; gap:10px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:12px;
+    color:var(--teal);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .sec-kicker .n{
+    color:var(--ink-faint);
+  }
+  h2{
+    font-family:"Newsreader", Georgia, serif;
+    font-weight:500;
+    font-size:25px;
+    margin:0 0 12px;
+    text-wrap:balance;
+  }
+  section.card p{ margin:0 0 14px; color:var(--ink); }
+  section.card p.lede{ color:var(--ink); }
+  .verse{
+    font-family:"Newsreader", Georgia, serif;
+    font-style:italic;
+    font-size:19px;
+    color:var(--ink);
+    background:var(--teal-soft);
+    border-left:3px solid var(--teal);
+    padding:16px 18px;
+    border-radius:0 8px 8px 0;
+    margin:6px 0 16px;
+  }
+  .verse cite{ display:block; font-style:normal; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-faint); margin-top:8px; }
+
+  .flag{
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--warn-bg); color:var(--warn-ink);
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11.5px;
+    padding:5px 10px;
+    border-radius:6px;
+    margin:2px 0 14px;
+  }
+
+  .placeholder{
+    background:var(--surface);
+    border:1px dashed var(--hairline);
+    border-radius:10px;
+    padding:16px 18px;
+    color:var(--ink-soft);
+    font-size:14px;
+  }
+  .placeholder b{ color:var(--ink); }
+
+  .advisor-box{
+    background:var(--surface);
+    border:1px solid var(--hairline);
+    border-left:3px solid var(--gold);
+    border-radius:0 10px 10px 0;
+    padding:16px 18px;
+    margin:6px 0 16px;
+  }
+  .advisor-box .lbl{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--gold-ink);
+    margin-bottom:6px;
+  }
+  .advisor-box p{ margin:0; }
+
+  .sources{
+    margin-top:10px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:12px;
+    color:var(--ink-faint);
+  }
+  .sources a{ color:var(--teal); text-decoration:underline; text-decoration-color:var(--hairline); }
+  .sources a:hover{ text-decoration-color:var(--teal); }
+
+  footer{
+    margin-top:50px;
+    padding-top:22px;
+    border-top:1px solid var(--hairline);
+    font-size:13px;
+    color:var(--ink-faint);
+  }
+  footer p{ margin:0 0 8px; }
+
+  @media (max-width:600px){
+    h1.title{ font-size:30px; }
+    .page{ padding:0 16px 60px; }
+  }
+</style>
+</head><body>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="eyebrow">Daily edition</div>
+    <h1 class="title">Your Morning Brief</h1>
+    <div class="sub"><b>Monday, 21 September 2026</b> · Pretoria, South Africa</div>
+  </header>
+
+  <div class="install-bar" id="installBar" hidden>
+    <div><b>Add this to your phone:</b> <span id="installText">On iPhone — tap Share, then "Add to Home Screen." On Android — tap the browser menu (⋮) and choose "Install app" or "Add to Home Screen."</span></div>
+    <button class="x" id="installDismiss" title="Hide this note">✕</button>
+  </div>
+
+  <div class="audio-bar" id="audioBar">
+    <button class="btn primary" id="playBtn">▶ Play brief aloud</button>
+    <button class="btn" id="pauseBtn" disabled>Pause</button>
+    <button class="btn" id="stopBtn" disabled>Stop</button>
+    <span class="audio-status" id="audioStatus">Ready</span>
+    <div class="audio-note">Uses your browser's built‑in voice (set to a South African or British English female voice when your device has one). Sections read in order — insurance → tech → life skill → gym → weather → Bible → news → politics → sport.</div>
+  </div>
+
+  <div class="glance">
+    <div><div class="k">Weather</div><div class="v">Partly sunny, 25°C in Pretoria; flooding risk KZN/EC</div></div>
+    <div><div class="k">Calendar</div><div class="v">Not connected yet</div></div>
+    <div><div class="k">Sport this week</div><div class="v">Proteas open vs Australia 24 Sep · Boks train in Perth</div></div>
+    <div><div class="k">Gym</div><div class="v">Day 9 · Full body (stepping up)</div></div>
+  </div>
+
+  <!-- 1: INSURANCE -->
+  <section class="card" id="sec-insurance">
+    <div class="sec-kicker"><span class="n">01</span> SA Insurance Industry</div>
+    <h2>October fuel hike bears down as the FSCA keeps up its scam-warning drumbeat</h2>
+    <p class="lede">South African motorists are facing a steep fuel price increase from the first Wednesday of October: reports on 15 September put the rise at roughly R2.17/litre for 93 ULP/LRP petrol, R2.29/litre for 95 ULP/LRP, R1.87–R2.22/litre for diesel (depending on sulphur content), and R2.39/litre for illuminating paraffin — driven by Brent crude trading back near $103 a barrel, its highest since May, on Middle East conflict and Russia-Ukraine-linked shipping disruption. Separately, the FSCA's own "Latest News" page shows it continuing its regular public-warning programme against impersonation and unauthorised financial-services operators, with a warning against "BorneMX Market" published on 10 September and a batch of warnings in early September covering individuals impersonating Rand Merchant Bank, an outfit calling itself "Trillionaire Forex Institution," enforcement action against senior officers of Altvest Limited, and a caution on "BSM Financial Solutions."</p>
+    <p><b>What it means for you:</b> a fuel increase of this size doesn't just hit the pump — it feeds into short-term motor insurance too. Panel-beating, towing and parts logistics all get more expensive when fuel costs rise, and insurers typically pass that claims-cost inflation through at renewal. It's also exactly the kind of squeeze that makes cutting cover, or reaching for an unfamiliar "better deal," tempting — which is where this week's FSCA warnings matter: several of the entities named are impersonating real, recognisable institutions (Rand Merchant Bank's name and branding, in one case) to look legitimate.</p>
+    <p><b>Plain-English takeaway:</b> no formal premium rule changed this week. Budget for a real jump in running costs from October, and before switching insurers or investment providers to save money, verify any FSP directly with the FSCA (0800 110 443 or the FAIS online search) rather than trusting a WhatsApp message, a familiar-looking logo, or a name that sounds official.</p>
+    <div class="advisor-box">
+      <div class="lbl">For you as a financial adviser — what to watch</div>
+      <p>Four compliance items worth a check this month: the new FAIS CPD cycle runs 1 June 2026 – 31 May 2027, and FSPs, key individuals and reps are expected to have a training plan in place for it now, not later. The FSCA's new automated supervisory reporting platform (the "IRS") was planned to go live 1 September — worth confirming your practice's own reporting workflow accounts for it. If you're a Category II, IIA or III FSP, the Investments Under Management declaration (as at 31 August) was due to the FSCA by 15 September via the ePortal — check it was filed if that's you. And if your practice is an accountable institution under FICA, goAML registration and location details need to be verified on the FIC's platform by 29 October. Beyond dates: it's worth keeping your own FSP details and representative register current on the FAIS ePortal, and treating this week's impersonation warnings (the fake Rand Merchant Bank solicitations in particular) as a reason to double-check your own FSP number isn't being misused before a client asks you about it.</p>
+    </div>
+    <div class="sources">Sources: <a href="https://www.capetownetc.com/news/sa-fuel-price-petrol-and-diesel-could-rise-by-more-than-r2-in-october-2026/" target="_blank" rel="noopener">CapeTownETC — SA fuel price: petrol and diesel could rise by more than R2 in October (15 September 2026)</a> · <a href="https://www.fsca.co.za/Latest-News/" target="_blank" rel="noopener">FSCA — Latest News (warnings dated 3 and 10 September 2026)</a> · <a href="https://www.masthead.co.za/notice-board/prepare-for-the-2026-2027-cpd-cycle/" target="_blank" rel="noopener">Masthead Compliance — prepare for the 2026/2027 CPD cycle</a> · <a href="https://www.masthead.co.za/newsletter/reminders-01-september-2026/" target="_blank" rel="noopener">Masthead Compliance — reminders, 1 September 2026</a> · <a href="https://www.horizoncompliance.co.za/complianceblog/your-2026-compliance-calendar" target="_blank" rel="noopener">Horizon Compliance — your 2026 compliance calendar</a></div>
+  </section>
+
+  <!-- 2: TECH -->
+  <section class="card" id="sec-tech">
+    <div class="sec-kicker"><span class="n">02</span> New Tech — AI, Phones &amp; EVs</div>
+    <h2>iPhone 18 Pro lands in SA today as affordable Chinese EVs finally crack the R400k mark</h2>
+    <p><b>Phones:</b> Apple's iPhone 18 Pro reached South African shelves on 18 September, after iStore pre-orders the previous weekend — the Pro starts at R28,800 (256GB) rising to R57,700 (2TB), and the Pro Max starts at R31,300 rising to R60,000, with MTN offering the base Pro from R1,300/month over 36 months. That launch lands against a broader shift in the local market: NielsenIQ data (reported 1 September) showed South African smartphone unit sales down 7.9% in the first half of 2026 while average selling prices rose 9.8% — the only major tech category still growing in value, as buyers replace phones less often but pay more when they do.</p>
+    <p><b>EVs:</b> South Africa's Festival of Motoring (reported 10 September) showcased 19 battery-electric models, 18 of them Chinese-made — with the Chery Q confirmed as the cheapest at R349,000. That matters because roughly 61% of new South African car sales happen below the R400,000 mark, a price band that until now had only a handful of battery-EV options.</p>
+    <p><b>AI:</b> OpenAI CEO Sam Altman confirmed to Fortune (12 September) that the company will not pursue an IPO in 2026, saying "right now would be an ill-advised moment to go public" and citing the need for more time on AI safety and alignment work first.</p>
+    <div class="sources">Sources: <a href="https://stuff.co.za/2026/09/14/iphone-18-pro-starts-r28799-in-south-africa/" target="_blank" rel="noopener">Stuff South Africa — iPhone 18 Pro starts at R28,799 in South Africa (14 September)</a> · <a href="https://techcentral.co.za/smartphone-prices-south-africa-niq-2026/285592/" target="_blank" rel="noopener">TechCentral — smartphone prices up 9.8%, sales down (1 September)</a> · <a href="https://techcentral.co.za/affordable-electric-cars-south-africa-festival-of-motoring/285995/" target="_blank" rel="noopener">TechCentral — cheap electric cars are finally coming to South Africa (10 September)</a> · <a href="https://www.axios.com/2026/09/12/openai-public-ipo-delay-sam-altman" target="_blank" rel="noopener">Axios — OpenAI delaying IPO amid AI safety concerns (12 September)</a></div>
+  </section>
+
+  <!-- 3: LIFE SKILL -->
+  <section class="card" id="sec-skill">
+    <div class="sec-kicker"><span class="n">03</span> Life Skill of the Day</div>
+    <h2>First aid: the "five-and-five" method for a choking adult</h2>
+    <p>Choking is one of the few emergencies where the right response in the first minute matters enormously, and most people freeze simply because they've never rehearsed the steps. Mayo Clinic's guidance boils it down to something memorable: alternate five back blows with five abdominal thrusts.</p>
+    <p>If someone is choking but can still cough forcefully or speak, don't intervene — encourage them to keep coughing, since that's the body's own most effective response. If they can't breathe, can't talk, or start turning blue, act: stand slightly behind and to one side, bend them forward at the waist, and strike firmly between the shoulder blades with the heel of your hand — five times. If that doesn't clear the airway, move to abdominal thrusts (the Heimlich manoeuvre): stand behind them, wrap your arms around their waist, make a fist just above the navel, grasp it with your other hand, and thrust sharply inward and upward, five times. Keep alternating five-and-five until the object comes out or the person can breathe again. If you're alone with them, do this first before stopping to call for help; if someone else is nearby, have them call while you act.</p>
+    <p><b>Try this today:</b> just say "five and five" out loud to yourself once or twice — that one phrase is what will surface under pressure if you ever need it. Muscle memory beats panic.</p>
+    <div class="sources">Source: <a href="https://www.mayoclinic.org/first-aid/first-aid-choking/basics/art-20056637" target="_blank" rel="noopener">Mayo Clinic — Choking: First aid</a></div>
+  </section>
+
+  <!-- 4: GYM -->
+  <section class="card" id="sec-gym">
+    <div class="sec-kicker"><span class="n">04</span> Gym Program — Home / Limited Equipment</div>
+    <h2>Day 9 — Full body, first step up since Day 6</h2>
+    <p>Small bump this session — Day 7 held steady on Day 6's numbers, and the plan itself flagged Day 9 as the next point to step up. <span class="flag">⚠ assumption</span> No further sessions have been logged since, so today still reflects Day 9's numbers below — update me once you've actually trained again and I'll move the plan on properly rather than guessing at how many sessions have passed.</p>
+    <p><b>Warm-up (5 min):</b> marching on the spot, arm circles, bodyweight squats × 10, hip circles.</p>
+    <p><b>Main set — 2 rounds, rest 60–90s between exercises:</b><br>
+    Bodyweight squats × 18 · Push-ups (knees down if needed) × 14–16 · Glute bridges × 18 · Bent-over rows with dumbbells/bands × 16 · Plank hold × 40–50s · Standing calf raises × 22</p>
+    <p><b>Cool-down (5 min):</b> quad stretch, chest-opener stretch, seated hamstring stretch, deep breathing.</p>
+    <p>Normal, even soreness that fades within a day or two of the previous session is fine — go ahead at today's numbers. Sharp, one-sided, or joint-specific pain, or soreness bad enough to change how you walk or lift your arms, means skip today, rest, and flag it so the plan can adjust rather than pushing through it.</p>
+  </section>
+
+  <!-- 5: CALENDAR -->
+  <section class="card" id="sec-calendar">
+    <div class="sec-kicker"><span class="n">05</span> Calendar</div>
+    <h2>Not connected yet</h2>
+    <div class="placeholder">This section will show today's and tomorrow's events once <b>Google Calendar</b> is connected. In the real app, I'll flag anything that needs prep (a meeting you're chairing, a deadline closing today) here — never invented, always pulled straight from your calendar.</div>
+  </section>
+
+  <!-- 6: WEATHER -->
+  <section class="card" id="sec-weather">
+    <div class="sec-kicker"><span class="n">06</span> Weather</div>
+    <h2>A mild, breezy spell in Pretoria; flooding risk lingers in KZN and the Eastern Cape</h2>
+    <p>Pretoria's recent run has been partly sunny and breezy with highs around 25°C and lows near 12°C — low rain chances day to day, but a "very high" UV index (around 8), so sun protection is still worth it. Gauteng more broadly has been partly cloudy, cool to warm, with isolated showers or thundershowers possible.</p>
+    <p>Elsewhere in the country, the South African Weather Service has had Orange-level warnings in force for the KwaZulu-Natal coast and interior and parts of the Eastern Cape (Port St Johns, Ingquza Hill, Ntabankulu) for disruptive rain, flash flooding and danger to life from fast-flowing streams, alongside Yellow-level warnings for severe thunderstorms, large hail and damaging winds further inland, and snow over high-lying areas including Matatiele and Elundini. Anyone in or travelling through KZN or the Eastern Cape should keep checking SAWS directly, since this kind of warning can shift quickly day to day.</p>
+    <div class="sources">Sources: <a href="https://www.accuweather.com/en/za/pretoria/305449/daily-weather-forecast/305449" target="_blank" rel="noopener">AccuWeather — Pretoria daily forecast</a> · <a href="https://www.citizen.co.za/news/south-africa/weather/" target="_blank" rel="noopener">The Citizen — South Africa weather</a></div>
+  </section>
+
+  <!-- 7: BIBLE -->
+  <section class="card" id="sec-bible">
+    <div class="sec-kicker"><span class="n">07</span> Uit die Bybel · From Scripture</div>
+    <h2>Filippense 4:6–7 (1933/1953-vertaling)</h2>
+    <div class="verse">
+      "Wees oor niks besorg nie, maar laat julle begeertes in alles deur gebed en smeking met danksegging bekend word by God. En die vrede van God, wat alle verstand te bowe gaan, sal julle harte en julle sinne bewaar in Christus Jesus."
+      <cite>Filippense 4:6–7, Afrikaans 1933/1953-vertaling</cite>
+    </div>
+    <p><b>In plain English:</b> Paul doesn't tell his readers not to feel the weight of their circumstances — he tells them what to do with it: turn anxiety into a specific, named request ("in everything, through prayer and petition"), and bring it with thanksgiving already attached, before the outcome is known. The promise that follows isn't that the request gets granted exactly as asked — it's that "the peace of God, which surpasses all understanding" will stand guard over your heart and mind. The Greek word behind "guard" is a military one, the same used for a garrison protecting a city; it's peace as a sentry, not a feeling that simply arrives.</p>
+    <p><b>One thing to carry today:</b> pick the one thing you're actually anxious about right now — not a vague list, one specific thing — and turn it into a named request instead of carrying it as unformed worry. Say what you're asking for, out loud or in writing, and attach one thing you're thankful for in the same breath.</p>
+    <div class="sources">Source: <a href="https://www.biblesa.co.za/bible/AFR53/PHP.4" target="_blank" rel="noopener">BibleSA — Filippense 4, Afrikaans 1933/1953-vertaling (AFR53)</a></div>
+  </section>
+
+  <!-- 8: NEWS -->
+  <section class="card" id="sec-news">
+    <div class="sec-kicker"><span class="n">08</span> World &amp; South Africa</div>
+    <h2>Ramaphosa booked off on medical advice as Ekurhuleni murder investigation widens</h2>
+    <p><b>South Africa:</b> the Presidency confirmed on 16–17 September that President Cyril Ramaphosa has been "booked off from public engagements" on medical advice to rest, shortly after returning from the BRICS summit in India — no diagnosis was disclosed and no return date given, with ministers deputising for him at scheduled events in the meantime. Separately, Gauteng police are investigating the deaths of at least eight women whose bodies have been found across Kempton Park, Olifantsfontein and Kwa-Thema in Ekurhuleni, with only two victims positively identified as of 16 September; a report of a possible ninth body remained unconfirmed by police and is flagged here rather than stated as settled. In a separate case, former SABC sports presenter and music-rights activist Owen Ndlovu was killed during a hijacking on the East Rand, with his body found in Thokoza on 16 September; Gauteng police have launched a manhunt for three suspects.</p>
+    <p><b>World:</b> former Kosovo president Hashim Thaçi was sentenced on 16 September to 25 years for wartime atrocities. Separately, US President Trump said on 16–17 September that he believes a deal with Iran is close, citing direct contact with Iranian officials, while a UN fact-finding mission concluded the United States "likely" committed violations of international law in February strikes on an Iranian school and sports facility — a finding the US has disputed.</p>
+    <div class="sources">Sources: <a href="https://iol.co.za/news/politics/2026-09-16-ramaphosa-booked-off-from-public-engagements-due-to-ill-health/" target="_blank" rel="noopener">IOL — Ramaphosa booked off from public engagements due to ill health (16 September)</a> · <a href="https://www.ewn.co.za/2026/09/16/the-day-that-was-anc-loses-bid-against-iec-ekurhuleni-murder-investigation-continues-former-sabc-presenter-found-dead" target="_blank" rel="noopener">EWN — the day that was (16 September)</a> · <a href="https://www.justsecurity.org/157611/early-edition-september-17-2026/" target="_blank" rel="noopener">Just Security — Early Edition (17 September)</a></div>
+  </section>
+
+  <!-- 9: POLITICS -->
+  <section class="card" id="sec-politics">
+    <div class="sec-kicker"><span class="n">09</span> Politics</div>
+    <h2>EFF's urgent bid over Madonsela's removal reached court; Phala Phala review judgment still pending</h2>
+    <p>President Ramaphosa's application to review and set aside the Section 89 panel report remains under judgment reservation following argument on 2–4 September, with no ruling handed down yet. The related evidence-leader dispute has moved forward: the impeachment committee had recommended Advocate Thandazani Griffiths Madonsela as evidence leader on 5 August, but voted 18–9 on 1 September to rescind that recommendation after President Ramaphosa raised a conflict-of-interest objection — Madonsela had previously served as one of his representatives on the Judicial Service Commission and, separately, had given the ANC legal advice on the impeachment process itself. The EFF filed an urgent application in the Western Cape High Court under Rule 6(12), naming Speaker Thoko Didiza, the committee chair, President Ramaphosa and Madonsela as respondents, seeking to have the rescission declared unlawful; that matter was due to be heard on 18 September, with no outcome confirmed as of this edition — worth checking for an update if this is one you're following closely.</p>
+    <p>On the 4 November local government elections, the IEC confirmed on 16 September that 136,790 candidates have been cleared to contest 10,526 seats across 8 metros and 249 district and local municipalities, after disqualifying roughly 5,096 of an initial 142,000-odd nominations; 546 parties are contesting nationally. The Electoral Court also dismissed an ANC appeal against the IEC over a missed candidate-list deadline in six municipalities, clearing the way for the IEC to publish all candidate lists for public scrutiny.</p>
+    <div class="sources">Sources: <a href="https://www.dailymaverick.co.za/article/2026-09-04-phala-phala-court-arguments-put-presidential-accountability-under-scrutiny/" target="_blank" rel="noopener">Daily Maverick — Phala Phala court arguments (4 September)</a> · <a href="https://www.businessday.co.za/news/2026-09-01-impeachment-committee-rescinds-nomination-of-madonsela-as-evidence-leader/" target="_blank" rel="noopener">Business Day — committee rescinds Madonsela nomination (1 September)</a> · <a href="https://iol.co.za/news/politics/2026-09-16-more-than-136000-candidates-cleared-to-contest-november-local-government-elections/" target="_blank" rel="noopener">IOL — more than 136,000 candidates cleared to contest elections (16 September)</a></div>
+  </section>
+
+  <!-- 10: SPORT -->
+  <section class="card" id="sec-sport">
+    <div class="sec-kicker"><span class="n">10</span> Sport — Rugby, Cricket, Tennis, Golf &amp; Hockey</div>
+    <h2>Boks train in Perth for the Wallabies Test as Proteas recall Coetzee and lose Rabada for the Australia series</h2>
+    <p><b>Rugby:</b> the Springboks landed in Australia on 15 September fresh off their 3-1 series win over the All Blacks, training in Perth ahead of the Test against the Wallabies at Optus Stadium on Sunday 27 September. Rassie Erasmus has said Australia "will present a completely different challenge" after three demanding Tests in a row (Argentina, then two against New Zealand), with player management and recovery a key focus. On the Wallabies' side, coach Les Kiss has recalled experienced outside back Jordan Petaia and turned to youth at flyhalf after an injury to Carter Gordon — Western Force rookie Harry McLaughlin-Phillips is in contention for a possible debut alongside Ben Donaldson, with veterans Bernard Foley and James O'Connor left out.</p>
+    <p><b>Cricket:</b> Cricket South Africa has confirmed its 16-man squad, captained by Temba Bavuma, for the home ODI series against Australia — 1st ODI at Kingsmead, Durban on 24 September; 2nd ODI at the Wanderers, Johannesburg (a Pink Day fixture) on 27 September; 3rd ODI at the NWC Oval, Potchefstroom on 30 September. The headline news is the ODI recall of fast bowler Gerald Coetzee, playing his first 50-over cricket since the 2023 World Cup, and a first ODI opportunity for Ottneil Baartman; Kagiso Rabada is ruled out through injury, and Aiden Markram will miss the first ODI before returning for matches two and three. Head coach Shukri Conrad framed the series as a chance to build a middle order that can "be explosive but have the ability to absorb pressure" ahead of the 2027 World Cup.</p>
+    <div class="placeholder"><b>Tennis, golf and hockey</b> — you mentioned these but I don't yet have specific players, tours or teams to track (e.g. which golfer, which hockey team). Tell me who to follow and I'll pull real results for them daily instead of generic headlines.</div>
+    <div class="sources">Sources: <a href="https://www.timeslive.co.za/sport/rugby/2026-09-16-springboks-arrive-in-australia-ready-for-another-massive-challenge/" target="_blank" rel="noopener">TimesLive — Springboks arrive in Australia (16 September)</a> · <a href="https://iol.co.za/sport/rugby/international/2026-09-17-wallabies-turn-to-youth-as-springboks-prepare-to-bring-the-physicality-in-perth/" target="_blank" rel="noopener">IOL — Wallabies turn to youth as Springboks prepare (17 September)</a> · <a href="https://briefly.co.za/sports/252352-proteas-16-man-squad-australia-odi-series-gerald-coetzee-returns/" target="_blank" rel="noopener">Briefly — Proteas 16-man squad for the Australia ODI series</a></div>
+  </section>
+
+  <footer>
+    <p>Generated 21 September 2026 for Africa/Johannesburg (05:00 SAST) · Not financial, medical, legal or investment advice. This brief regenerates automatically every morning and republishes to this same link.</p>
+    <p>Installable as an app — open this page on your phone and add it to your home screen (see the note near the top). Once installed it opens full-screen, without browser address bars, like any other app icon.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  // ---- Install-to-home-screen note (dismissible, remembered per device) ----
+  (function(){
+    var bar = document.getElementById("installBar");
+    var dismiss = document.getElementById("installDismiss");
+    var KEY = "morningbrief_install_dismissed";
+    var alreadyDismissed = false;
+    try { alreadyDismissed = localStorage.getItem(KEY) === "1"; } catch(e){}
+    var isStandalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
+    if (!isStandalone && !alreadyDismissed) {
+      bar.hidden = false;
+    }
+    dismiss.addEventListener("click", function(){
+      bar.hidden = true;
+      try { localStorage.setItem(KEY, "1"); } catch(e){}
+    });
+  })();
+
+  // ---- Register service worker (installability + basic offline) ----
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function(){
+      navigator.serviceWorker.register("sw.js").catch(function(){ /* not fatal */ });
+    });
+  }
+
+  // ---- Read-aloud, preferring a South African or British English female voice ----
+  var sections = ["sec-insurance","sec-tech","sec-skill","sec-gym","sec-calendar","sec-weather","sec-bible","sec-news","sec-politics","sec-sport"];
+  function textOf(id){
+    var el = document.getElementById(id);
+    if(!el) return "";
+    var clone = el.cloneNode(true);
+    var srcs = clone.querySelectorAll(".sources, .flag");
+    srcs.forEach(function(n){ n.remove(); });
+    return clone.innerText.replace(/\s+/g," ").trim();
+  }
+  var playBtn = document.getElementById("playBtn");
+  var pauseBtn = document.getElementById("pauseBtn");
+  var stopBtn = document.getElementById("stopBtn");
+  var status = document.getElementById("audioStatus");
+  var synth = window.speechSynthesis;
+  var queue = [];
+  var idx = 0;
+  var run = 0; // bumped on every play/stop so callbacks from cancelled speech are ignored
+  var supported = !!synth;
+  var chosenVoice = null;
+
+  if(!supported){
+    playBtn.disabled = true;
+    status.textContent = "Voice not supported in this browser";
+    return;
+  }
+
+  // Known female voice names on common platforms for ZA/GB English.
+  // "Tessa" is Apple's South African English voice (iOS/macOS). The rest are
+  // common British English female voices on iOS/macOS/Android/Windows.
+  var FEMALE_NAME_HINTS = ["tessa","serena","kate","fiona","female","zoe","zira","hazel","libby","olivia","stephanie","susan","emma","amy"];
+  var MALE_NAME_HINTS = ["daniel","arthur","oliver","george","ryan","male","james","fred"];
+
+  function scoreVoice(v){
+    var lang = (v.lang || "").toLowerCase();
+    var name = (v.name || "").toLowerCase();
+    var score = 0;
+    if (lang.indexOf("en-za") === 0) score += 100;      // South African English
+    else if (lang.indexOf("en-gb") === 0) score += 80;  // British English
+    else if (lang.indexOf("en-au") === 0) score += 20;  // fallback: AU
+    else if (lang.indexOf("en") === 0) score += 5;       // any other English
+    else return -1; // skip non-English voices entirely
+
+    var i;
+    for (i=0; i<FEMALE_NAME_HINTS.length; i++){
+      if (name.indexOf(FEMALE_NAME_HINTS[i]) !== -1) { score += 50; break; }
+    }
+    for (i=0; i<MALE_NAME_HINTS.length; i++){
+      if (name.indexOf(MALE_NAME_HINTS[i]) !== -1) { score -= 50; break; }
+    }
+    if (name.indexOf("tessa") !== -1) score += 25; // extra nudge for the ZA voice specifically
+    return score;
+  }
+
+  function pickVoice(){
+    var voices = synth.getVoices() || [];
+    if (!voices.length) return null;
+    var best = null, bestScore = -1;
+    voices.forEach(function(v){
+      var s = scoreVoice(v);
+      if (s > bestScore){ bestScore = s; best = v; }
+    });
+    return best;
+  }
+
+  function refreshVoice(){ chosenVoice = pickVoice(); }
+  refreshVoice();
+  if (typeof synth.onvoiceschanged !== "undefined") {
+    synth.onvoiceschanged = refreshVoice;
+  }
+
+  function buildQueue(){
+    queue = sections.map(textOf).filter(function(t){ return t.length > 0; });
+    idx = 0;
+  }
+
+  function speakNext(){
+    if(idx >= queue.length){
+      status.textContent = "Finished";
+      playBtn.disabled = false;
+      pauseBtn.disabled = true;
+      stopBtn.disabled = true;
+      playBtn.textContent = "▶ Play brief aloud";
+      return;
+    }
+    var utter = new SpeechSynthesisUtterance(queue[idx]);
+    utter.rate = 1.0;
+    if (chosenVoice) { utter.voice = chosenVoice; utter.lang = chosenVoice.lang; }
+    else { utter.lang = "en-GB"; }
+    var myRun = run;
+    utter.onend = function(){ if (myRun !== run) return; idx++; speakNext(); };
+    utter.onerror = function(){ if (myRun !== run) return; idx++; speakNext(); };
+    status.textContent = "Reading section " + (idx+1) + " of " + queue.length + (chosenVoice ? " — " + chosenVoice.name : "");
+    synth.speak(utter);
+  }
+
+  playBtn.addEventListener("click", function(){
+    if(synth.paused && synth.speaking){
+      synth.resume();
+      status.textContent = "Reading section " + (idx+1) + " of " + queue.length;
+    } else {
+      if (!chosenVoice) refreshVoice();
+      buildQueue();
+      run++;
+      synth.cancel();
+      speakNext();
+    }
+    playBtn.disabled = true;
+    pauseBtn.disabled = false;
+    stopBtn.disabled = false;
+  });
+
+  pauseBtn.addEventListener("click", function(){
+    synth.pause();
+    status.textContent = "Paused";
+    playBtn.disabled = false;
+    playBtn.textContent = "▶ Resume";
+  });
+
+  stopBtn.addEventListener("click", function(){
+    run++;
+    synth.cancel();
+    idx = 0;
+    status.textContent = "Stopped";
+    playBtn.disabled = false;
+    playBtn.textContent = "▶ Play brief aloud";
+    pauseBtn.disabled = true;
+    stopBtn.disabled = true;
+  });
+})();
+</script>
+
+</body></html>

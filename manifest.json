@@ -1,0 +1,17 @@
+{
+  "name": "Mnag's Morning Brief",
+  "short_name": "Morning Brief",
+  "description": "Daily personal briefing: insurance, tech, a life skill, your gym plan, weather, scripture, news, politics and sport.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F6F2",
+  "theme_color": "#2F6F62",
+  "lang": "en-ZA",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
